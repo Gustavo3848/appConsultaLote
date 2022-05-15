@@ -1,28 +1,28 @@
-<video id='video'></video>
-<canvas id='canvas'></canvas>
-<button id='capture'>Capturar</button>
-<script>
-navigator.mediaDevices.getUserMedia({video: true})
-.then(function (mediaStream) {
-    // nosso código aqui
-})
-.catch(function (err) {
-    console.log('Não há permissões para acessar a webcam')
-})
-navigator.mediaDevices.getUserMedia({video: true})
-.then(function (mediaStream) {
-  var video = document.querySelector('#video');
-     video.srcObject = mediaStream;
-     video.play();
-})
-.catch(function (err) {
-  console.log('Não há permissões para acessar a webcam')
-})
-document.querySelector('#capture').addEventListener('click', function (e) {
-  var canvas = document.querySelector("#canvas");  
-  canvas.height = video.videoHeight;
-  canvas.width = video.videoWidth;
-  var context = canvas.getContext('2d');
-  context.drawImage(video, 0, 0)
-})
+<div class="container" id="containerQR">
+  <div class="row">
+    <div class="col">
+      <h1 class="text-center">Scanear Lote</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <video id="qr-video"></video>
+    </div>
+  </div>
+</div>
+<script type="module">
+  import QrScanner from "../node_modules/qr-scanner/qr-scanner.min.js";
+  var videoElem = document.getElementById("qr-video")
+  const  qrScanner  =  new  QrScanner ( videoElem ,  resultado  =>  window.location = "http://localhost:3000/app/resultado/"+resultado ) ;
+  qrScanner.start();
 </script>
+<style>
+  #qr-video {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+</style>

@@ -24,6 +24,7 @@ app.use(expressLayouts);
 
 //Public Static
 app.use('/static', express.static('public'));
+app.use('/node_modules', express.static('node_modules'));
 app.use(bodyParser.urlencoded({ extended: true }))
 app.get('/',(req,res)=>{
     res.render("./index.ejs")
