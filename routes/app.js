@@ -10,17 +10,29 @@ Route.get('/saldoporlote', (req, res) => {
 });
 Route.get('/resultado/:lote', (req, res) => {
     var Lote = req.params.lote
-    axios({
-            method: 'get',
-            url: API + '/rest/uDev/' + Lote.trim(),
-            responseType: 'json'
+    const username = req.session.user.user
+    const password = req.session.user.password
+
+    const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+    axios.get(API + '/rest/uDev/' + Lote.trim(), {
+            headers: {
+                'Authorization': `Basic ${token}`
+            }
         })
-        .then(function (response) {
+        .then((response) => {
             var lote = response.data.lote
-            var saldo = Math.round(response.data.saldo/0.06)
-            var empenhado = Math.round(response.data.empenhado/0.06)
+            var saldo = Math.round(response.data.saldo / 0.06)
+            var empenhado = Math.round(response.data.empenhado / 0.06)
             var produto = response.data.produto
-            res.render("./consulta/resultado.ejs",{lote,saldo,empenhado,produto})
-        });
+            res.render("./consulta/resultado.ejs", {
+                lote,
+                saldo,
+                empenhado,
+                produto
+            })  
+        })
+        .catch((error) => {
+            console.error(error)
+        })
 });
 module.exports = Route;

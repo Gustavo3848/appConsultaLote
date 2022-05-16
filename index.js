@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const auth = require('./config/auth');
 const axios = require('axios')
 const appRoute = require('./routes/app.js');
-const URL = "http://localhost:8084/"
+const API = "http://34.198.64.95:8084"
 //const auth = require('./config/auth');
 //Session
 app.use(session({
@@ -31,26 +31,27 @@ app.get('/',(req,res)=>{
 });
 
 app.get('/login',(req,res)=>{
-    res.render("./user/login.ejs")
+    res.render("./user/login.ejs",{msg:""})
 })
-app.post('/login/auth',(req,res)=>{
-    var login = req.body.user
-    var password = req.body.password
-    /*
-    axios.post(URL + "/rest/uDev/auth", {user:login,senha:password})
-    .then(function (response) {
-        if (response == true){
+app.post('/login/auth',(req,res)=>{    
+    var Lote = "teste"
+    const username = req.body.user
+    const password = req.body.password
+
+    const token = Buffer.from(`${username}:${password}`, 'utf8').toString('base64')
+    axios.get(API + '/rest/uDev/' + Lote.trim(), {
+            headers: {
+                'Authorization': `Basic ${token}`
+            }
+        })
+        .then((response) => {
+            req.session.user = {user:username,password:password}
             res.redirect("/app/home")
-        }else{
-            res.redirect('/login')
-        }
-    })
-    .catch(function (error) {
-        console.error(error);
-    });
-    */
-    req.session.user = {login:login}
-    res.redirect("/app/home")
+        })
+        .catch((error) => {
+            console.log(error)
+            res.redirect("/login")
+        })
 })
 
 app.use('/app' ,auth ,appRoute);

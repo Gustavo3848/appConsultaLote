@@ -13,7 +13,7 @@
 <script type="module">
   import QrScanner from "../node_modules/qr-scanner/qr-scanner.min.js";
   var videoElem = document.getElementById("qr-video")
-  const  qrScanner  =  new  QrScanner ( videoElem ,  resultado  =>  window.location = "http://localhost:3000/app/resultado/"+resultado ) ;
+  const  qrScanner  =  new  QrScanner ( videoElem ,  resultado  => qrScanner.stop()(window.location = "http://localhost:3000/app/resultado/"+resultado )) ;
   qrScanner.start();
 </script>
 <style>
