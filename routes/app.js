@@ -10,6 +10,7 @@ Route.get('/saldoporlote', (req, res) => {
 });
 Route.get('/resultado/:lote', (req, res) => {
     var Lote = req.params.lote
+    console.log(Lote)
     const username = req.session.user.user
     const password = req.session.user.password
 
@@ -23,12 +24,14 @@ Route.get('/resultado/:lote', (req, res) => {
             var lote = response.data.lote
             var saldo = Math.round(response.data.saldo / 0.06)
             var empenhado = Math.round(response.data.empenhado / 0.06)
+            var toneladas = response.data.saldo
             var produto = response.data.produto
             res.render("./consulta/resultado.ejs", {
                 lote,
                 saldo,
                 empenhado,
-                produto
+                produto,
+                toneladas
             })  
         })
         .catch((error) => {
